@@ -2,7 +2,7 @@ public class Producto {
     private String nombre;
     private int precio;
     private int cantidad;
-    private int indice;
+    // private int indice;
 
     public Producto(String nombre, int precio, int cantidad){
         this.nombre=nombre;
@@ -31,10 +31,10 @@ public class Producto {
         return cantidad;
     }
 
-    public int getIndice(){
-        return indice;
-    }
-    public void setIndice(int indice){
-        this.indice=indice;
-    }
+    // public int getIndice(){
+    //     return indice;
+    // }
+    // public void setIndice(int indice){
+    //     this.indice=indice;
+    // }
 }

@@ -1,5 +1,4 @@
-import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedList;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,13 +16,22 @@ public class Main {
         tienda.agregarProducto(producto5);
         tienda.agregarProducto(producto6);
 
-        List<Producto> lista = tienda.obtenerTodosLosProductos();
+        tienda.removerProducto(tienda.buscarProducto("d"));
+        LinkedList<Producto> lista = tienda.obtenerTodosLosProductos();
 
-        Iterator<Producto> it = lista.iterator();
+        imprimirElementosEnOrden(lista);
 
-        while(it.hasNext()){
-            Producto i = it.next();
-            System.out.println("El elemento siguiente es: " + i.getNombre() + ". Y su indice es: " + i.getIndice());
+    }
+    
+    public static void imprimirElementosEnOrden(LinkedList<Producto> lista){
+        IteradorProductos iteradorProductos = new IteradorProductos(lista);
+        int i = 0;
+
+        while(iteradorProductos.haySiguienteProducto()){
+            i++;
+            Producto producto = iteradorProductos.siguienteProducto();
+        
+            System.out.println(i + ". " + producto.getNombre());
         }
     }
 }
