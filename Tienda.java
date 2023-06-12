@@ -2,24 +2,26 @@ import java.util.LinkedList;
 
 public class Tienda implements Inventario {
     private LinkedList<Producto> inventario;
-    // private static int indice;
 
     public Tienda(){
         inventario = new LinkedList<Producto>();
-        // indice = 0;
     }
 
     public void agregarProducto(Producto producto) {
-        inventario.add(producto);
-        // producto.setIndice(indice);
-        // indice++;
-        // System.out.println(indice);
+        if (inventario.isEmpty()) {
+            inventario.add(producto);
+        } else {
+            int indice = 0;
+            while (indice < inventario.size() && producto.getPrecio() > inventario.get(indice).getPrecio()) {
+                indice++;
+            }
+            inventario.add(indice, producto);
+        }
     }
 
     public void removerProducto(Producto producto) {
         if(inventario.contains(producto)){
             inventario.remove(producto);
-            // indice--;
         }
     }
 
@@ -35,9 +37,4 @@ public class Tienda implements Inventario {
     public LinkedList<Producto> obtenerTodosLosProductos() {
         return inventario;
     }
-
-    // public static int getIndice(){
-    //     return indice;
-    // }
-    
 }
