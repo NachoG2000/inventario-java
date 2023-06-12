@@ -187,13 +187,13 @@ public void mostrarElementosEnOrden(LinkedList<Producto> lista) {
 public void mostrarElementosAlReves(LinkedList<Producto> lista) {
     StringBuilder sb = new StringBuilder();
     ListIterator<Producto> iteradorProductos = lista.listIterator(lista.size());
-    int i = lista.size();
+    int i = 1;
 
     while (iteradorProductos.hasPrevious()) {
         Producto producto = iteradorProductos.previous();
         sb.append(i).append(". ").append(producto.getNombre()).append(" - Precio: $")
                 .append(producto.getPrecio()).append(" - Cantidad: ").append(producto.getCantidad()).append(" unidades\n");
-        i--;
+        i++;
     }
 
     JOptionPane.showMessageDialog(null, sb.toString());
