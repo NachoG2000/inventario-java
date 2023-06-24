@@ -44,7 +44,7 @@ public class MainGUI extends JFrame {
         JButton ordenAscendenteButton = new JButton("Imprimir de menor a mayor");
         JButton ordenDescendenteButton = new JButton("Imprimir de mayor a menor");
 
-        String[] opciones = {"Precio", "Cantidad", "Alfabéticamente"};
+        String[] opciones = {"Ordenar por:", "Precio", "Cantidad", "Alfabéticamente"};
         JComboBox<String> ordenComboBox = new JComboBox<>(opciones);
         ordenComboBox.setSelectedIndex(0);
 
@@ -55,32 +55,42 @@ public class MainGUI extends JFrame {
         buttonPanel.add(buscarButton);
         buttonPanel.add(ordenAscendenteButton);
         buttonPanel.add(ordenDescendenteButton);
-        buttonPanel.add(new JLabel("Ordenar por:"));
         buttonPanel.add(ordenComboBox);
+
+        ordenAscendenteButton.setVisible(false);
+        ordenDescendenteButton.setVisible(false);
 
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
         
         ordenComboBox.addActionListener(e -> {
-        String selectedOption = (String) ordenComboBox.getSelectedItem();
+            String selectedOption = (String) ordenComboBox.getSelectedItem();
             switch (selectedOption) {
                 case "Precio":
-                   QuickSort sortByPrice = new QuickSort();
-                   sortByPrice.quickSortByPrice(tienda.obtenerTodosLosProductos(), 0, tienda.obtenerTodosLosProductos().size() - 1);
+                    QuickSort sortByPrice = new QuickSort();
+                    sortByPrice.quickSortByPrice(tienda.obtenerTodosLosProductos(), 0, tienda.obtenerTodosLosProductos().size() - 1);
+                    ordenAscendenteButton.setVisible(true);
+                    ordenDescendenteButton.setVisible(true);
                     break;
                 case "Cantidad":
                     QuickSort sortByQuantity = new QuickSort();
                     sortByQuantity.quickSortByQuantity(tienda.obtenerTodosLosProductos(), 0, tienda.obtenerTodosLosProductos().size() - 1);
+                    ordenAscendenteButton.setVisible(true);
+                    ordenDescendenteButton.setVisible(true);
                     break;
                 case "Alfabéticamente":
                     QuickSort sortByName = new QuickSort();
                     sortByName.quickSortByName(tienda.obtenerTodosLosProductos(), 0, tienda.obtenerTodosLosProductos().size() - 1);
+                    ordenAscendenteButton.setVisible(true);
+                    ordenDescendenteButton.setVisible(true);
                     break;
                 default:
-                    // Handle default or "Orden" option
+                    ordenAscendenteButton.setVisible(false);
+                    ordenDescendenteButton.setVisible(false);
                     break;
             }
-         });
+        });
+
 
         agregarButton.addActionListener(new ActionListener() {
             @Override
@@ -230,12 +240,12 @@ public void mostrarElementosAlReves(LinkedList<Producto> lista) {
     }
 
     public void agregarProductosParaVisualizacion(Tienda tienda) {
-        Producto producto1 = new Producto("MANZANA", 10, 10);
-        Producto producto2 = new Producto("PERA", 20, 20);
-        Producto producto3 = new Producto("BANANA", 15, 30);
-        Producto producto4 = new Producto("NARANJA", 30, 60);
-        Producto producto5 = new Producto("UVA", 50, 50);
-        Producto producto6 = new Producto("FRUTILLA", 5, 1000);
+        Producto producto1 = new Producto("A", 10, 10);
+        Producto producto2 = new Producto("B", 20, 20);
+        Producto producto3 = new Producto("C", 15, 30);
+        Producto producto4 = new Producto("D", 30, 60);
+        Producto producto5 = new Producto("E", 50, 50);
+        Producto producto6 = new Producto("F", 5, 1000);
         Producto[] arrayProductos = new Producto[]{producto1, producto2, producto3, producto4, producto5, producto6};
         tienda.agregarProducto(arrayProductos);
     }
