@@ -213,6 +213,29 @@ public void mostrarElementosAlReves(LinkedList<Producto> lista) {
         Producto producto6 = new Producto("FRUTILLA", 5, 100);
         Producto[] arrayProductos = new Producto[]{producto1, producto2, producto3, producto4, producto5, producto6};
         tienda.agregarProducto(arrayProductos);
-    }
+        tienda.agregarProducto(producto1);
+        tienda.agregarProducto(producto2);
+        tienda.agregarProducto(producto3);
 
+        System.out.println("Before sorting:");
+        for (Producto producto : tienda.obtenerTodosLosProductos()) {
+            System.out.println(producto.getNombre() + " - " + producto.getPrecio());
+        }
+
+        tienda.setCurrentOrder("nameDesc");
+        tienda.ordenarProductos();
+
+        System.out.println("\nAfter sorting by name in descending order:");
+        for (Producto producto : tienda.obtenerTodosLosProductos()) {
+            System.out.println(producto.getNombre() + " - " + producto.getPrecio());
+        }
+
+        tienda.setCurrentOrder("priceDesc");
+        tienda.ordenarProductos();
+
+        System.out.println("\nAfter sorting by price in descending order:");
+        for (Producto producto : tienda.obtenerTodosLosProductos()) {
+            System.out.println(producto.getNombre() + " - " + producto.getPrecio());
+        }
+    }
 }
