@@ -211,12 +211,8 @@ public void mostrarElementosAlReves(LinkedList<Producto> lista) {
         Producto producto4 = new Producto("NARANJA", 30, 100);
         Producto producto5 = new Producto("UVA", 50, 100);
         Producto producto6 = new Producto("FRUTILLA", 5, 100);
-        tienda.agregarProducto(producto1);
-        tienda.agregarProducto(producto2);
-        tienda.agregarProducto(producto3);
-        tienda.agregarProducto(producto4);
-        tienda.agregarProducto(producto5);
-        tienda.agregarProducto(producto6);
+        Producto[] arrayProductos = new Producto[]{producto1, producto2, producto3, producto4, producto5, producto6};
+        tienda.agregarProducto(arrayProductos);
     }
 
 }
