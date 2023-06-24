@@ -44,6 +44,10 @@ public class MainGUI extends JFrame {
         JButton ordenAscendenteButton = new JButton("Imprimir de menor a mayor");
         JButton ordenDescendenteButton = new JButton("Imprimir de mayor a menor");
 
+        String[] opciones = {"Precio", "Cantidad", "Alfabéticamente"};
+        JComboBox<String> ordenComboBox = new JComboBox<>(opciones);
+        ordenComboBox.setSelectedIndex(0);
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.add(agregarButton);
@@ -51,9 +55,32 @@ public class MainGUI extends JFrame {
         buttonPanel.add(buscarButton);
         buttonPanel.add(ordenAscendenteButton);
         buttonPanel.add(ordenDescendenteButton);
+        buttonPanel.add(new JLabel("Ordenar por:"));
+        buttonPanel.add(ordenComboBox);
 
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
+        
+        ordenComboBox.addActionListener(e -> {
+        String selectedOption = (String) ordenComboBox.getSelectedItem();
+            switch (selectedOption) {
+                case "Precio":
+                   QuickSort sortByPrice = new QuickSort();
+                   sortByPrice.quickSortByPrice(tienda.obtenerTodosLosProductos(), 0, tienda.obtenerTodosLosProductos().size() - 1);
+                    break;
+                case "Cantidad":
+                    QuickSort sortByQuantity = new QuickSort();
+                    sortByQuantity.quickSortByQuantity(tienda.obtenerTodosLosProductos(), 0, tienda.obtenerTodosLosProductos().size() - 1);
+                    break;
+                case "Alfabéticamente":
+                    QuickSort sortByName = new QuickSort();
+                    sortByName.quickSortByName(tienda.obtenerTodosLosProductos(), 0, tienda.obtenerTodosLosProductos().size() - 1);
+                    break;
+                default:
+                    // Handle default or "Orden" option
+                    break;
+            }
+         });
 
         agregarButton.addActionListener(new ActionListener() {
             @Override
@@ -94,53 +121,51 @@ public class MainGUI extends JFrame {
         setVisible(true);
     }
 
-public void agregarProducto() {
-    JTextField nombreField = new JTextField(10);
-    JTextField precioField = new JTextField(10);
-    JTextField cantidadField = new JTextField(10);
+    public void agregarProducto() {
+        JTextField nombreField = new JTextField(10);
+        JTextField precioField = new JTextField(10);
+        JTextField cantidadField = new JTextField(10);
 
-    JPanel panel = new JPanel();
-    panel.setLayout(new GridLayout(4, 2));
-    panel.add(new JLabel("Nombre del producto:"));
-    panel.add(nombreField);
-    panel.add(new JLabel("Precio del producto:"));
-    panel.add(precioField);
-    panel.add(new JLabel("Cantidad del producto:"));
-    panel.add(cantidadField);
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 2));
+        panel.add(new JLabel("Nombre del producto:"));
+        panel.add(nombreField);
+        panel.add(new JLabel("Precio del producto:"));
+        panel.add(precioField);
+        panel.add(new JLabel("Cantidad del producto:"));
+        panel.add(cantidadField);
 
-    int result = JOptionPane.showConfirmDialog(null, panel, "Agregar Producto",
-            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        int result = JOptionPane.showConfirmDialog(null, panel, "Agregar Producto",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-    if (result == JOptionPane.OK_OPTION) {
-        try {
-            String nombre = nombreField.getText();
-            int precio = Integer.parseInt(precioField.getText());
-            int cantidad = Integer.parseInt(cantidadField.getText());
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                String nombre = nombreField.getText();
+                int precio = Integer.parseInt(precioField.getText());
+                int cantidad = Integer.parseInt(cantidadField.getText());
 
-            // Validar errores
-            if (nombre.isEmpty() || precio <= 0 || cantidad <= 0) {
-                throw new IllegalArgumentException("Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.");
+                // Validar errores
+                if (nombre.isEmpty() || precio <= 0 || cantidad <= 0) {
+                    throw new IllegalArgumentException("Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.");
+                }
+
+                // Verificar si el nombre del producto ya existe
+                if (tienda.buscarProducto(nombre) != null) {
+                    throw new IllegalArgumentException("Error: Ya existe un producto con ese nombre.");
+                }
+
+                Producto producto = new Producto(nombre, precio, cantidad);
+                tienda.agregarProducto(producto);
+
+                actualizarTextArea();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (IllegalArgumentException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-
-            // Verificar si el nombre del producto ya existe
-            if (tienda.buscarProducto(nombre) != null) {
-                throw new IllegalArgumentException("Error: Ya existe un producto con ese nombre.");
-            }
-
-            Producto producto = new Producto(nombre, precio, cantidad);
-            tienda.agregarProducto(producto);
-
-            actualizarTextArea();
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-}
-
-
 
     public void eliminarProducto() {
         String nombreProductoEliminar = JOptionPane.showInputDialog("Ingrese el nombre del producto a eliminar:");
@@ -205,37 +230,14 @@ public void mostrarElementosAlReves(LinkedList<Producto> lista) {
     }
 
     public void agregarProductosParaVisualizacion(Tienda tienda) {
-        Producto producto1 = new Producto("MANZANA", 10, 100);
-        Producto producto2 = new Producto("PERA", 20, 100);
-        Producto producto3 = new Producto("BANANA", 15, 100);
-        Producto producto4 = new Producto("NARANJA", 30, 100);
-        Producto producto5 = new Producto("UVA", 50, 100);
-        Producto producto6 = new Producto("FRUTILLA", 5, 100);
+        Producto producto1 = new Producto("MANZANA", 10, 10);
+        Producto producto2 = new Producto("PERA", 20, 20);
+        Producto producto3 = new Producto("BANANA", 15, 30);
+        Producto producto4 = new Producto("NARANJA", 30, 60);
+        Producto producto5 = new Producto("UVA", 50, 50);
+        Producto producto6 = new Producto("FRUTILLA", 5, 1000);
         Producto[] arrayProductos = new Producto[]{producto1, producto2, producto3, producto4, producto5, producto6};
         tienda.agregarProducto(arrayProductos);
-        tienda.agregarProducto(producto1);
-        tienda.agregarProducto(producto2);
-        tienda.agregarProducto(producto3);
-
-        System.out.println("Before sorting:");
-        for (Producto producto : tienda.obtenerTodosLosProductos()) {
-            System.out.println(producto.getNombre() + " - " + producto.getPrecio());
-        }
-
-        tienda.setCurrentOrder("nameDesc");
-        tienda.ordenarProductos();
-
-        System.out.println("\nAfter sorting by name in descending order:");
-        for (Producto producto : tienda.obtenerTodosLosProductos()) {
-            System.out.println(producto.getNombre() + " - " + producto.getPrecio());
-        }
-
-        tienda.setCurrentOrder("priceDesc");
-        tienda.ordenarProductos();
-
-        System.out.println("\nAfter sorting by price in descending order:");
-        for (Producto producto : tienda.obtenerTodosLosProductos()) {
-            System.out.println(producto.getNombre() + " - " + producto.getPrecio());
-        }
     }
+
 }

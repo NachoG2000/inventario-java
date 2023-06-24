@@ -47,6 +47,27 @@ public class QuickSort {
         return i + 1;
     }
 
+    public void quickSortByQuantity(LinkedList<Producto> array, int low, int high){
+        if (low < high) {
+            int partitionIndex = partitionByQuantity(array, low, high);
+            quickSortByQuantity(array, low, partitionIndex - 1);
+            quickSortByQuantity(array, partitionIndex + 1, high);
+        }
+    }
+
+    public int partitionByQuantity(LinkedList<Producto> array, int low, int high){
+        Producto pivot = array.get(high);
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (array.get(j).getCantidad() > pivot.getCantidad()) {
+                i++;
+                swap(array, i, j);
+            }
+        }
+        swap(array, i + 1, high);
+        return i + 1;
+    }
+
     private void swap(LinkedList<Producto> array, int i, int j) {
         Producto temp = array.get(i);
         array.set(i, array.get(j));
