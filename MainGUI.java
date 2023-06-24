@@ -44,6 +44,10 @@ public class MainGUI extends JFrame {
         JButton ordenAscendenteButton = new JButton("Imprimir de menor a mayor");
         JButton ordenDescendenteButton = new JButton("Imprimir de mayor a menor");
 
+        String[] opciones = {"Precio", "Cantidad", "Alfabéticamente"};
+        JComboBox<String> ordenComboBox = new JComboBox<>(opciones);
+        ordenComboBox.setSelectedIndex(0);
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.add(agregarButton);
@@ -51,9 +55,32 @@ public class MainGUI extends JFrame {
         buttonPanel.add(buscarButton);
         buttonPanel.add(ordenAscendenteButton);
         buttonPanel.add(ordenDescendenteButton);
+        buttonPanel.add(new JLabel("Ordenar por:"));
+        buttonPanel.add(ordenComboBox);
 
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
+        
+        ordenComboBox.addActionListener(e -> {
+        String selectedOption = (String) ordenComboBox.getSelectedItem();
+            switch (selectedOption) {
+                case "Precio":
+                    // Handle sorting by price
+                    textArea.setText("Ordenado por Precio");
+                    break;
+                case "Cantidad":
+                    // Handle sorting by quantity
+                    textArea.setText("Ordenado por Cantidad");
+                    break;
+                case "Alfabéticamente":
+                    // Handle sorting alphabetically
+                    textArea.setText("Ordenado Alfabeticamente");
+                    break;
+                default:
+                    // Handle default or "Orden" option
+                    break;
+            }
+         });
 
         agregarButton.addActionListener(new ActionListener() {
             @Override
@@ -94,51 +121,51 @@ public class MainGUI extends JFrame {
         setVisible(true);
     }
 
-public void agregarProducto() {
-    JTextField nombreField = new JTextField(10);
-    JTextField precioField = new JTextField(10);
-    JTextField cantidadField = new JTextField(10);
+    public void agregarProducto() {
+        JTextField nombreField = new JTextField(10);
+        JTextField precioField = new JTextField(10);
+        JTextField cantidadField = new JTextField(10);
 
-    JPanel panel = new JPanel();
-    panel.setLayout(new GridLayout(4, 2));
-    panel.add(new JLabel("Nombre del producto:"));
-    panel.add(nombreField);
-    panel.add(new JLabel("Precio del producto:"));
-    panel.add(precioField);
-    panel.add(new JLabel("Cantidad del producto:"));
-    panel.add(cantidadField);
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 2));
+        panel.add(new JLabel("Nombre del producto:"));
+        panel.add(nombreField);
+        panel.add(new JLabel("Precio del producto:"));
+        panel.add(precioField);
+        panel.add(new JLabel("Cantidad del producto:"));
+        panel.add(cantidadField);
 
-    int result = JOptionPane.showConfirmDialog(null, panel, "Agregar Producto",
-            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        int result = JOptionPane.showConfirmDialog(null, panel, "Agregar Producto",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-    if (result == JOptionPane.OK_OPTION) {
-        try {
-            String nombre = nombreField.getText();
-            int precio = Integer.parseInt(precioField.getText());
-            int cantidad = Integer.parseInt(cantidadField.getText());
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                String nombre = nombreField.getText();
+                int precio = Integer.parseInt(precioField.getText());
+                int cantidad = Integer.parseInt(cantidadField.getText());
 
-            // Validar errores
-            if (nombre.isEmpty() || precio <= 0 || cantidad <= 0) {
-                throw new IllegalArgumentException("Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.");
+                // Validar errores
+                if (nombre.isEmpty() || precio <= 0 || cantidad <= 0) {
+                    throw new IllegalArgumentException("Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.");
+                }
+
+                // Verificar si el nombre del producto ya existe
+                if (tienda.buscarProducto(nombre) != null) {
+                    throw new IllegalArgumentException("Error: Ya existe un producto con ese nombre.");
+                }
+
+                Producto producto = new Producto(nombre, precio, cantidad);
+                tienda.agregarProducto(producto);
+
+                actualizarTextArea();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (IllegalArgumentException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-
-            // Verificar si el nombre del producto ya existe
-            if (tienda.buscarProducto(nombre) != null) {
-                throw new IllegalArgumentException("Error: Ya existe un producto con ese nombre.");
-            }
-
-            Producto producto = new Producto(nombre, precio, cantidad);
-            tienda.agregarProducto(producto);
-
-            actualizarTextArea();
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-}
 
 
 

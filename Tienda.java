@@ -1,10 +1,18 @@
 import java.util.LinkedList;
 
+enum SortingOption {
+    PRECIO,
+    CANTIDAD,
+    ALFABETICAMENTE
+}
+
 public class Tienda implements Inventario {
     private LinkedList<Producto> inventario;
+    private SortingOption sortingOption;
 
     public Tienda(){
         inventario = new LinkedList<Producto>();
+        sortingOption = SortingOption.PRECIO;
     }
 
     public void agregarProducto(Producto producto) {
@@ -42,5 +50,13 @@ public class Tienda implements Inventario {
 
     public LinkedList<Producto> obtenerTodosLosProductos() {
         return inventario;
+    }
+
+    public void setSortingOption(SortingOption option){
+        this.sortingOption = option;
+    }
+
+    public SortingOption getSortingOption(){
+        return sortingOption;
     }
 }
