@@ -19,6 +19,12 @@ public class Tienda implements Inventario {
         }
     }
 
+    public void agregarProducto(Producto[] productos){
+        for(Producto producto : productos){
+            this.agregarProducto(producto);
+        }
+    }
+
     public void removerProducto(Producto producto) {
         if(inventario.contains(producto)){
             inventario.remove(producto);
