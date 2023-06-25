@@ -31,7 +31,12 @@ public class MainGUI extends JFrame {
                 + "- Buscar Producto: Permite buscar un producto por su nombre en la tienda.\n"
                 + "- Imprimir de menor a mayor: Muestra los productos de la tienda en orden ascendente según su precio.\n"
                 + "- Imprimir de mayor a menor: Muestra los productos de la tienda en orden descendente según su precio.\n\n"
-                + "Para realizar una acción, simplemente haz clic en el botón correspondiente.\n";
+                + "Además, dependiendo de la opción seleccionada en el menú desplegable, se realizará una clasificación de los productos. Las opciones disponibles son:\n\n"
+                + "- Precio: Ordena los productos según su precio, de menor a mayor o de mayor a menor, según la opción seleccionada.\n"
+                + "- Cantidad: Ordena los productos según la cantidad disponible, de menor a mayor o de mayor a menor, según la opción seleccionada.\n"
+                + "- Alfabéticamente: Ordena los productos alfabéticamente por su nombre, en orden ascendente o descendente, según la opción seleccionada.\n\n"
+                + "Para realizar una acción, simplemente haz clic en el botón correspondiente.\n\n";
+
         textArea.setText(welcomeMessage + tutorialMessage);
         JScrollPane scrollPane = new JScrollPane(textArea);
         JButton agregarButton = new JButton("Agregar Producto");
