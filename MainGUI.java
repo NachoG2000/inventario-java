@@ -8,7 +8,8 @@ import java.util.ListIterator;
 public class MainGUI extends JFrame {
     private Tienda tienda;
     private JTextArea textArea;
-
+    private JComboBox<String> ordenComboBox;
+    
     public MainGUI() {
         tienda = new Tienda();
         agregarProductosParaVisualizacion(tienda);
@@ -45,7 +46,7 @@ public class MainGUI extends JFrame {
         JButton ordenDescendenteButton = new JButton("Imprimir de mayor a menor");
 
         String[] opciones = {"Ordenar por:", "Precio", "Cantidad", "Alfabéticamente"};
-        JComboBox<String> ordenComboBox = new JComboBox<>(opciones);
+        ordenComboBox = new JComboBox<>(opciones);
         ordenComboBox.setSelectedIndex(0);
 
         JPanel buttonPanel = new JPanel();
@@ -91,7 +92,6 @@ public class MainGUI extends JFrame {
             }
         });
 
-
         agregarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -131,51 +131,69 @@ public class MainGUI extends JFrame {
         setVisible(true);
     }
 
-    public void agregarProducto() {
-        JTextField nombreField = new JTextField(10);
-        JTextField precioField = new JTextField(10);
-        JTextField cantidadField = new JTextField(10);
+public void agregarProducto() {
+    JTextField nombreField = new JTextField(10);
+    JTextField precioField = new JTextField(10);
+    JTextField cantidadField = new JTextField(10);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 2));
-        panel.add(new JLabel("Nombre del producto:"));
-        panel.add(nombreField);
-        panel.add(new JLabel("Precio del producto:"));
-        panel.add(precioField);
-        panel.add(new JLabel("Cantidad del producto:"));
-        panel.add(cantidadField);
+    JPanel panel = new JPanel();
+    panel.setLayout(new GridLayout(4, 2));
+    panel.add(new JLabel("Nombre del producto:"));
+    panel.add(nombreField);
+    panel.add(new JLabel("Precio del producto:"));
+    panel.add(precioField);
+    panel.add(new JLabel("Cantidad del producto:"));
+    panel.add(cantidadField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Agregar Producto",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+    int result = JOptionPane.showConfirmDialog(null, panel, "Agregar Producto",
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-        if (result == JOptionPane.OK_OPTION) {
-            try {
-                String nombre = nombreField.getText();
-                int precio = Integer.parseInt(precioField.getText());
-                int cantidad = Integer.parseInt(cantidadField.getText());
+    if (result == JOptionPane.OK_OPTION) {
+        try {
+            String nombre = nombreField.getText();
+            int precio = Integer.parseInt(precioField.getText());
+            int cantidad = Integer.parseInt(cantidadField.getText());
 
-                // Validar errores
-                if (nombre.isEmpty() || precio <= 0 || cantidad <= 0) {
-                    throw new IllegalArgumentException("Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.");
-                }
-
-                // Verificar si el nombre del producto ya existe
-                if (tienda.buscarProducto(nombre) != null) {
-                    throw new IllegalArgumentException("Error: Ya existe un producto con ese nombre.");
-                }
-
-                Producto producto = new Producto(nombre, precio, cantidad);
-                tienda.agregarProducto(producto);
-
-                actualizarTextArea();
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (IllegalArgumentException e) {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            // Validar errores
+            if (nombre.isEmpty() || precio <= 0 || cantidad <= 0) {
+                throw new IllegalArgumentException("Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.");
             }
+
+            // Verificar si el nombre del producto ya existe
+            if (tienda.buscarProducto(nombre) != null) {
+                throw new IllegalArgumentException("Error: Ya existe un producto con ese nombre.");
+            }
+
+            Producto producto = new Producto(nombre, precio, cantidad);
+            tienda.agregarProducto(producto);
+
+            QuickSort quickSort = new QuickSort();
+            String selectedOption = (String) ordenComboBox.getSelectedItem();
+
+            switch (selectedOption) {
+                case "Precio":
+                    quickSort.quickSortByPrice(tienda.obtenerTodosLosProductos(), 0, tienda.obtenerTodosLosProductos().size() - 1);
+                    break;
+                case "Cantidad":
+                    quickSort.quickSortByQuantity(tienda.obtenerTodosLosProductos(), 0, tienda.obtenerTodosLosProductos().size() - 1);
+                    break;
+                case "Alfabéticamente":
+                    quickSort.quickSortByName(tienda.obtenerTodosLosProductos(), 0, tienda.obtenerTodosLosProductos().size() - 1);
+                    break;
+                default:
+                    break;
+            }
+
+            actualizarTextArea();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+}
+
 
     public void eliminarProducto() {
         String nombreProductoEliminar = JOptionPane.showInputDialog("Ingrese el nombre del producto a eliminar:");

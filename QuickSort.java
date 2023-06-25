@@ -2,10 +2,10 @@ import java.util.LinkedList;
 
 public class QuickSort {
     
-    QuickSort(){
+    public QuickSort() {
     }
 
-    public void quickSortByName(LinkedList<Producto> array, int low, int high){
+    public void quickSortByName(LinkedList<Producto> array, int low, int high) {
         if (low < high) {
             int partitionIndex = partitionByName(array, low, high);
             quickSortByName(array, low, partitionIndex - 1);
@@ -13,11 +13,11 @@ public class QuickSort {
         }
     }
 
-    public int partitionByName(LinkedList<Producto> array, int low, int high){
+    public int partitionByName(LinkedList<Producto> array, int low, int high) {
         Producto pivot = array.get(high);
         int i = low - 1;
         for (int j = low; j < high; j++) {
-            if (array.get(j).getNombre().compareTo(pivot.getNombre()) > 0) {
+            if (array.get(j).getNombre().compareTo(pivot.getNombre()) < 0) {
                 i++;
                 swap(array, i, j);
             }
@@ -26,7 +26,7 @@ public class QuickSort {
         return i + 1;
     }
 
-    public void quickSortByPrice(LinkedList<Producto> array, int low, int high){
+    public void quickSortByPrice(LinkedList<Producto> array, int low, int high) {
         if (low < high) {
             int partitionIndex = partitionByPrice(array, low, high);
             quickSortByPrice(array, low, partitionIndex - 1);
@@ -34,11 +34,11 @@ public class QuickSort {
         }
     }
 
-    public int partitionByPrice(LinkedList<Producto> array, int low, int high){
+    public int partitionByPrice(LinkedList<Producto> array, int low, int high) {
         Producto pivot = array.get(high);
         int i = low - 1;
         for (int j = low; j < high; j++) {
-            if (array.get(j).getPrecio() > pivot.getPrecio()) {
+            if (array.get(j).getPrecio() < pivot.getPrecio()) {
                 i++;
                 swap(array, i, j);
             }
@@ -47,7 +47,7 @@ public class QuickSort {
         return i + 1;
     }
 
-    public void quickSortByQuantity(LinkedList<Producto> array, int low, int high){
+    public void quickSortByQuantity(LinkedList<Producto> array, int low, int high) {
         if (low < high) {
             int partitionIndex = partitionByQuantity(array, low, high);
             quickSortByQuantity(array, low, partitionIndex - 1);
@@ -55,11 +55,11 @@ public class QuickSort {
         }
     }
 
-    public int partitionByQuantity(LinkedList<Producto> array, int low, int high){
+    public int partitionByQuantity(LinkedList<Producto> array, int low, int high) {
         Producto pivot = array.get(high);
         int i = low - 1;
         for (int j = low; j < high; j++) {
-            if (array.get(j).getCantidad() > pivot.getCantidad()) {
+            if (array.get(j).getCantidad() < pivot.getCantidad()) {
                 i++;
                 swap(array, i, j);
             }
