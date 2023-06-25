@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -50,7 +52,6 @@ public class MainGUI extends JFrame {
         buttonPanel.add(buscarButton);
         buttonPanel.add(ordenAscendenteButton);
         buttonPanel.add(ordenDescendenteButton);
-
         buttonPanel.add(ordenComboBox);
 
         ordenAscendenteButton.setVisible(false);
@@ -58,6 +59,13 @@ public class MainGUI extends JFrame {
 
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
+
+        buttonPanel.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                pack();
+            }
+        });
 
         ordenComboBox.addActionListener(e -> {
 
@@ -86,6 +94,7 @@ public class MainGUI extends JFrame {
                     ordenDescendenteButton.setVisible(false);
                     break;
             }
+            pack();
         });
 
         agregarButton.addActionListener(new ActionListener() {
@@ -121,6 +130,7 @@ public class MainGUI extends JFrame {
         pack();
         setVisible(true);
     }
+        
     public void agregarProducto() {
         JTextField nombreField = new JTextField(10);
         JTextField precioField = new JTextField(10);
@@ -169,14 +179,14 @@ public class MainGUI extends JFrame {
             }
 
             actualizarTextArea();
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-           }
-       }
-   }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (IllegalArgumentException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
 
 
     public void eliminarProducto() {
@@ -190,6 +200,7 @@ public class MainGUI extends JFrame {
             JOptionPane.showMessageDialog(null, "No se encontró el producto a eliminar.");
         }
     }
+
     public void buscarProducto() {
         String nombreProducto = JOptionPane.showInputDialog("Ingrese el nombre del producto a buscar:");
         Producto productoEncontrado = tienda.buscarProducto(nombreProducto);
@@ -202,30 +213,33 @@ public class MainGUI extends JFrame {
             JOptionPane.showMessageDialog(null, "No se encontró el producto.");
         }
     }
-public void mostrarElementosEnOrden(LinkedList<Producto> lista) {
-    StringBuilder sb = new StringBuilder();
-    ListIterator<Producto> iteradorProductos = lista.listIterator();
-    int i = 1;
-    while (iteradorProductos.hasNext()) {
-        Producto producto = iteradorProductos.next();
-        sb.append(i).append(". ").append(producto.getNombre()).append(" - Precio: $")
-                .append(producto.getPrecio()).append(" - Cantidad: ").append(producto.getCantidad()).append(" unidades\n");
-        i++;
+
+    public void mostrarElementosEnOrden(LinkedList<Producto> lista) {
+        StringBuilder sb = new StringBuilder();
+        ListIterator<Producto> iteradorProductos = lista.listIterator();
+        int i = 1;
+        while (iteradorProductos.hasNext()) {
+            Producto producto = iteradorProductos.next();
+            sb.append(i).append(". ").append(producto.getNombre()).append(" - Precio: $")
+                    .append(producto.getPrecio()).append(" - Cantidad: ").append(producto.getCantidad()).append(" unidades\n");
+            i++;
+        }
+        JOptionPane.showMessageDialog(null, sb.toString());
     }
-    JOptionPane.showMessageDialog(null, sb.toString());
-}
-public void mostrarElementosAlReves(LinkedList<Producto> lista) {
-    StringBuilder sb = new StringBuilder();
-    ListIterator<Producto> iteradorProductos = lista.listIterator(lista.size());
-    int i = 1;
-    while (iteradorProductos.hasPrevious()) {
-        Producto producto = iteradorProductos.previous();
-        sb.append(i).append(". ").append(producto.getNombre()).append(" - Precio: $")
-                .append(producto.getPrecio()).append(" - Cantidad: ").append(producto.getCantidad()).append(" unidades\n");
-        i++;
+
+    public void mostrarElementosAlReves(LinkedList<Producto> lista) {
+        StringBuilder sb = new StringBuilder();
+        ListIterator<Producto> iteradorProductos = lista.listIterator(lista.size());
+        int i = 1;
+        while (iteradorProductos.hasPrevious()) {
+            Producto producto = iteradorProductos.previous();
+            sb.append(i).append(". ").append(producto.getNombre()).append(" - Precio: $")
+                    .append(producto.getPrecio()).append(" - Cantidad: ").append(producto.getCantidad()).append(" unidades\n");
+            i++;
+        }
+        JOptionPane.showMessageDialog(null, sb.toString());
     }
-    JOptionPane.showMessageDialog(null, sb.toString());
-}
+
     public void actualizarTextArea() {
         LinkedList<Producto> lista = tienda.obtenerTodosLosProductos();
         mostrarElementosEnOrden(lista);
@@ -241,4 +255,5 @@ public void mostrarElementosAlReves(LinkedList<Producto> lista) {
         Producto[] arrayProductos = new Producto[]{producto1, producto2, producto3, producto4, producto5, producto6};
         tienda.agregarProducto(arrayProductos);
     }
+    
 }
