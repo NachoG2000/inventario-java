@@ -246,12 +246,12 @@ public class MainGUI extends JFrame {
     }
 
     public void agregarProductosParaVisualizacion(Tienda tienda) {
-        Producto producto1 = new Producto("A", 10, 10);
-        Producto producto2 = new Producto("B", 20, 20);
-        Producto producto3 = new Producto("C", 15, 30);
-        Producto producto4 = new Producto("D", 30, 60);
-        Producto producto5 = new Producto("E", 50, 50);
-        Producto producto6 = new Producto("F", 5, 1000);
+        Producto producto1 = new Producto("MANZANA", 10, 10);
+        Producto producto2 = new Producto("BANANA", 20, 20);
+        Producto producto3 = new Producto("NARANJA", 15, 30);
+        Producto producto4 = new Producto("UVA", 30, 60);
+        Producto producto5 = new Producto("SANDIA", 50, 50);
+        Producto producto6 = new Producto("FRUTILLA", 5, 1000);
         Producto[] arrayProductos = new Producto[]{producto1, producto2, producto3, producto4, producto5, producto6};
         tienda.agregarProducto(arrayProductos);
     }
