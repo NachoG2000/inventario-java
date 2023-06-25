@@ -9,23 +9,19 @@ public class MainGUI extends JFrame {
     private Tienda tienda;
     private JTextArea textArea;
     private JComboBox<String> ordenComboBox;
-    
+
     public MainGUI() {
         tienda = new Tienda();
         agregarProductosParaVisualizacion(tienda);
-
         LinkedList<Producto> lista = tienda.obtenerTodosLosProductos();
-
         setTitle("Inventario tienda");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-
         textArea = new JTextArea();
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-
         String welcomeMessage = "¡Bienvenido a la Tienda!\n\n";
         String tutorialMessage = "Este programa te permite interactuar con una tienda y realizar las siguientes acciones:\n\n"
                 + "- Agregar Producto: Permite agregar un nuevo producto a la tienda.\n"
@@ -34,11 +30,8 @@ public class MainGUI extends JFrame {
                 + "- Imprimir de menor a mayor: Muestra los productos de la tienda en orden ascendente según su precio.\n"
                 + "- Imprimir de mayor a menor: Muestra los productos de la tienda en orden descendente según su precio.\n\n"
                 + "Para realizar una acción, simplemente haz clic en el botón correspondiente.\n";
-
         textArea.setText(welcomeMessage + tutorialMessage);
-
         JScrollPane scrollPane = new JScrollPane(textArea);
-
         JButton agregarButton = new JButton("Agregar Producto");
         JButton eliminarButton = new JButton("Eliminar Producto");
         JButton buscarButton = new JButton("Buscar Producto");
@@ -65,7 +58,7 @@ public class MainGUI extends JFrame {
 
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
-        
+
         ordenComboBox.addActionListener(e -> {
 
             String selectedOption = (String) ordenComboBox.getSelectedItem();
@@ -101,44 +94,37 @@ public class MainGUI extends JFrame {
                 agregarProducto();
             }
         });
-
         eliminarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 eliminarProducto();
             }
         });
-
         buscarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 buscarProducto();
             }
         });
-
         ordenAscendenteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mostrarElementosEnOrden(lista);
             }
         });
-
         ordenDescendenteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mostrarElementosAlReves(lista);
             }
         });
-
         pack();
         setVisible(true);
     }
-
     public void agregarProducto() {
         JTextField nombreField = new JTextField(10);
         JTextField precioField = new JTextField(10);
         JTextField cantidadField = new JTextField(10);
-
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(4, 2));
         panel.add(new JLabel("Nombre del producto:"));
@@ -147,26 +133,21 @@ public class MainGUI extends JFrame {
         panel.add(precioField);
         panel.add(new JLabel("Cantidad del producto:"));
         panel.add(cantidadField);
-
         int result = JOptionPane.showConfirmDialog(null, panel, "Agregar Producto",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
         if (result == JOptionPane.OK_OPTION) {
             try {
                 String nombre = nombreField.getText();
                 int precio = Integer.parseInt(precioField.getText());
                 int cantidad = Integer.parseInt(cantidadField.getText());
-
                 // Validar errores
                 if (nombre.isEmpty() || precio <= 0 || cantidad <= 0) {
                     throw new IllegalArgumentException("Hubo un problema al agregar el producto. Por favor, verifica los valores ingresados y vuelve a intentarlo.");
                 }
-
                 // Verificar si el nombre del producto ya existe
                 if (tienda.buscarProducto(nombre) != null) {
                     throw new IllegalArgumentException("Error: Ya existe un producto con ese nombre.");
                 }
-
                 Producto producto = new Producto(nombre, precio, cantidad);
                 tienda.agregarProducto(producto);
 
@@ -200,7 +181,6 @@ public class MainGUI extends JFrame {
 
     public void eliminarProducto() {
         String nombreProductoEliminar = JOptionPane.showInputDialog("Ingrese el nombre del producto a eliminar:");
-
         Producto productoEliminar = tienda.buscarProducto(nombreProductoEliminar);
         if (productoEliminar != null) {
             tienda.removerProducto(productoEliminar);
@@ -210,10 +190,8 @@ public class MainGUI extends JFrame {
             JOptionPane.showMessageDialog(null, "No se encontró el producto a eliminar.");
         }
     }
-
     public void buscarProducto() {
         String nombreProducto = JOptionPane.showInputDialog("Ingrese el nombre del producto a buscar:");
-
         Producto productoEncontrado = tienda.buscarProducto(nombreProducto);
         if (productoEncontrado != null) {
             JOptionPane.showMessageDialog(null, "Producto encontrado:\n" +
@@ -224,37 +202,30 @@ public class MainGUI extends JFrame {
             JOptionPane.showMessageDialog(null, "No se encontró el producto.");
         }
     }
-
 public void mostrarElementosEnOrden(LinkedList<Producto> lista) {
     StringBuilder sb = new StringBuilder();
     ListIterator<Producto> iteradorProductos = lista.listIterator();
     int i = 1;
-
     while (iteradorProductos.hasNext()) {
         Producto producto = iteradorProductos.next();
         sb.append(i).append(". ").append(producto.getNombre()).append(" - Precio: $")
                 .append(producto.getPrecio()).append(" - Cantidad: ").append(producto.getCantidad()).append(" unidades\n");
         i++;
     }
-
     JOptionPane.showMessageDialog(null, sb.toString());
 }
-
 public void mostrarElementosAlReves(LinkedList<Producto> lista) {
     StringBuilder sb = new StringBuilder();
     ListIterator<Producto> iteradorProductos = lista.listIterator(lista.size());
     int i = 1;
-
     while (iteradorProductos.hasPrevious()) {
         Producto producto = iteradorProductos.previous();
         sb.append(i).append(". ").append(producto.getNombre()).append(" - Precio: $")
                 .append(producto.getPrecio()).append(" - Cantidad: ").append(producto.getCantidad()).append(" unidades\n");
         i++;
     }
-
     JOptionPane.showMessageDialog(null, sb.toString());
 }
-
     public void actualizarTextArea() {
         LinkedList<Producto> lista = tienda.obtenerTodosLosProductos();
         mostrarElementosEnOrden(lista);
@@ -270,5 +241,4 @@ public void mostrarElementosAlReves(LinkedList<Producto> lista) {
         Producto[] arrayProductos = new Producto[]{producto1, producto2, producto3, producto4, producto5, producto6};
         tienda.agregarProducto(arrayProductos);
     }
-
 }
