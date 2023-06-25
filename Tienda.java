@@ -16,15 +16,7 @@ public class Tienda implements Inventario {
     }
 
     public void agregarProducto(Producto producto) {
-        if (inventario.isEmpty()) {
-            inventario.add(producto);
-        } else {
-            int indice = 0;
-            while (indice < inventario.size() && producto.getPrecio() > inventario.get(indice).getPrecio()) {
-                indice++;
-            }
-            inventario.add(indice, producto);
-        }
+        inventario.addLast(producto);
     }
 
     public void agregarProducto(Producto[] productos){
